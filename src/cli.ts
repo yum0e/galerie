@@ -11,7 +11,7 @@ const SHUTDOWN_GRACE_PERIOD_MS = 30_000;
 let isExiting = false;
 
 const app = new Command();
-app.name("auth").description("Authentication service").version("0.0.1");
+app.name("auth-service").description("Authentication service").version("0.1.0");
 
 app
   .command("start")

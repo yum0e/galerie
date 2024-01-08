@@ -48,5 +48,9 @@ export class HttpAPIServer {
     this.app.get("/", (_, res) => {
       res.send("Hello World!");
     });
+
+    this.app.get("/health", (_, res) => {
+      res.send({ status: "ok" });
+    });
   }
 }
