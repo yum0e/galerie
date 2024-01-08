@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { HttpAPIServer } from "./api.js";
+import { HttpAPIServer } from "./api/index.js";
 import { logger } from "./logger.js";
 
 export type CliOptions = {
