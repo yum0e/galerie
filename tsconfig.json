@@ -32,5 +32,5 @@
     "esm": true
   },
 
-  "exclude": ["node_modules", "esbuild.config.cjs"]
+  "exclude": ["node_modules", "esbuild.config.js"]
 }

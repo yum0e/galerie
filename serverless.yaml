@@ -27,4 +27,4 @@ custom:
   serverless-offline:
     noPrependStageInUrl: true
   esbuild:
-    config: './esbuild.config.cjs'
+    config: './esbuild.config.js'
