@@ -1,6 +1,6 @@
 import express from "express";
 import http from "http";
-import pinoHTTP from "pino-http";
+import { pinoHttp } from "pino-http";
 import { logger } from "../logger";
 import { CliOptions } from "../cli";
 import { APIResult } from "../error";
@@ -15,7 +15,7 @@ export class HttpAPIServer {
 
   constructor() {
     this.app.use(
-      pinoHTTP({
+      pinoHttp({
         logger,
       }),
     );
