@@ -1,6 +1,6 @@
 import { Command } from "commander";
-import { HttpAPIServer } from "./api/index.js";
-import { logger } from "./logger.js";
+import { HttpAPIServer } from "./api";
+import { logger } from "./logger";
 
 export type CliOptions = {
   port: number;

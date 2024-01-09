@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "pnpm start:watch | pnpm pino-pretty",
     "prettier": "prettier --write .",
@@ -16,10 +15,14 @@
     "@swc/core": "^1.3.102",
     "@types/express": "^4.17.21",
     "@types/node": "^20.10.6",
+    "esbuild": "^0.19.11",
     "nodemon": "^3.0.2",
     "pino-pretty": "^10.3.1",
     "prettier": "^3.1.1",
+    "serverless": "^3.38.0",
+    "serverless-esbuild": "^1.50.1",
     "serverless-http": "^3.2.0",
+    "serverless-offline": "^13.3.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },

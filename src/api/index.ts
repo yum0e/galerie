@@ -1,13 +1,11 @@
 import express from "express";
 import http from "http";
 import pinoHTTP from "pino-http";
-import { logger } from "../logger.js";
-import { CliOptions } from "../cli.js";
-import { APIResult } from "../error.js";
+import { logger } from "../logger";
+import { CliOptions } from "../cli";
+import { APIResult } from "../error";
 import { ok } from "neverthrow";
 import { Server } from "http";
-
-export * from "./lambda.js";
 
 const log = logger.child({ component: "HttpAPIServer" });
 
@@ -51,7 +49,7 @@ export class HttpAPIServer {
   }
 
   initHandlers(): void {
-    this.app.get("/", (_, res) => {
+    this.app.get("/hello", (_, res) => {
       res.send("Hello World!");
     });
 

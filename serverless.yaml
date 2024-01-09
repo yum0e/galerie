@@ -1,23 +1,28 @@
 service: serverless-auth-service
+frameworkVersion: '3'
+
+package:
+  exclude:
+    - node_modules/**
+    - .serverless/**
+
+plugins:
+  - serverless-offline
+  - serverless-esbuild
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs16.x
   region: eu-central-1
-  stage: ${opt:stage, 'dev'}
-  memorySize: 512
+  stage: dev
+  memorySize: 1024
 
 functions:
   api:
-    handler: src/api.handler
+    handler: ./src/api/api-lambda.handler
     events:
-      - http:
-          path: /
-          method: ANY
-          # cors: true
-          # private: true
-      - http:
-          path: /{any+}
-          method: ANY
-          # cors: true
-          # private: true
+      - httpApi: '*'
+
+custom:
+  serverless-offline:
+    noPrependStageInUrl: true
