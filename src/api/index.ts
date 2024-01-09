@@ -1,21 +1,21 @@
 import express from "express";
 import http from "http";
-import pinoHTTP from "pino-http";
-import { logger } from "./logger.js";
-import { CliOptions } from "./cli.js";
-import { APIResult } from "./error.js";
+import { pinoHttp } from "pino-http";
+import { logger } from "../logger";
+import { CliOptions } from "../cli";
+import { APIResult } from "../error";
 import { ok } from "neverthrow";
 import { Server } from "http";
 
 const log = logger.child({ component: "HttpAPIServer" });
 
 export class HttpAPIServer {
-  app = express();
-  server: Server;
+  private app = express();
+  private server: Server;
 
   constructor() {
     this.app.use(
-      pinoHTTP({
+      pinoHttp({
         logger,
       }),
     );
@@ -23,6 +23,10 @@ export class HttpAPIServer {
     this.initHandlers();
 
     this.server = http.createServer(this.app);
+  }
+
+  getApi(): express.Express {
+    return this.app;
   }
 
   async start(cliOptions: CliOptions): Promise<APIResult<string>> {
@@ -45,7 +49,7 @@ export class HttpAPIServer {
   }
 
   initHandlers(): void {
-    this.app.get("/", (_, res) => {
+    this.app.get("/hello", (_, res) => {
       res.send("Hello World!");
     });
 

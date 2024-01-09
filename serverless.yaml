@@ -1,0 +1,30 @@
+service: serverless-auth-service
+frameworkVersion: '3'
+
+package:
+  exclude:
+    - node_modules/**
+    - .serverless/**
+
+plugins:
+  - serverless-offline
+  - serverless-esbuild
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-central-1
+  stage: dev
+  memorySize: 1024
+
+functions:
+  api:
+    handler: ./src/api/api-lambda.handler
+    events:
+      - httpApi: '*'
+
+custom:
+  serverless-offline:
+    noPrependStageInUrl: true
+  esbuild:
+    config: './esbuild.config.cjs'
