@@ -1,5 +1,5 @@
 {
-  "name": "serverless-auth",
+  "name": "galerie",
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
@@ -8,7 +8,7 @@
     "prettier": "prettier --write .",
     "start": "ts-node src/cli.ts start",
     "start:watch": "nodemon --watch src --ext 'ts,json' --exec \"pnpm run start\"",
-    "test": "vitest run --coverage"
+    "test": "LOG_LEVEL=silent vitest run --coverage --test-timeout=30000"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.63",

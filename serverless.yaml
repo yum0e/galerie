@@ -1,4 +1,4 @@
-service: serverless-auth-service
+service: galerie
 frameworkVersion: '3'
 
 package:
@@ -7,8 +7,8 @@ package:
     - .serverless/**
 
 plugins:
-  - serverless-offline
   - serverless-esbuild
+  - serverless-offline
 
 provider:
   name: aws
