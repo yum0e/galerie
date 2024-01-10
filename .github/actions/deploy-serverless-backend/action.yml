@@ -1,0 +1,29 @@
+name: "Deploy serverless backend"
+description: "Deploy serverless http api backend"
+
+inputs:
+  aws-access-key-id:
+    required: true
+    description: "The aws-access-key used to authenticate with AWS"
+  aws-secret-access-key:
+    required: true
+    description: "The aws-secret-access-key used to authenticate with AWS"
+  stage:
+    required: true
+    description: "The serverless stage"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: eu-central-1
+        role-duration-seconds: 900
+
+    - name: sls deploy
+      shell: bash
+      run: |
+        npx serverless deploy --stage ${{ inputs.stage }}

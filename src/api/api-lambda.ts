@@ -1,4 +1,4 @@
-import { createHttpServer } from ".";
+import { createHttpServer } from "./api";
 import serverless, { Handler } from "serverless-http";
 import { logger } from "../logger";
 

@@ -1,4 +1,4 @@
-import { createHttpServer } from ".";
+import { createHttpServer } from "./api";
 import { expect, test } from "vitest";
 import supertest from "supertest";
 import axios from "axios";
@@ -29,5 +29,19 @@ test("with axios", async () => {
     }
   `);
 
-  server.stop();
+  await server.stop();
+});
+
+test("tearDown", async () => {
+  const port = 3000;
+  await server.start({ port });
+  await server.teardown();
+
+  try {
+    await axios.get(`http://localhost:${port}/health`);
+  } catch (err: any) {
+    expect(err.cause).toMatchInlineSnapshot(
+      `[Error: connect ECONNREFUSED ::1:${port}]`,
+    );
+  }
 });

@@ -12,7 +12,7 @@ export type HttpServer = {
   logger: pino.Logger<never>;
   getApi(): express.Express;
   start(cliOptions: CliOptions): Promise<APIResult<string>>;
-  stop(): void;
+  stop(): Promise<void>;
   teardown(): Promise<void>;
 };
 
@@ -45,10 +45,6 @@ export const createHttpServer = ({
 };
 
 const initHandlers = (app: express.Express): void => {
-  app.get("/hello", (_, res) => {
-    res.send("Hello World!");
-  });
-
   app.get("/health", (_, res) => {
     res.send({ status: "ok" });
   });
@@ -71,8 +67,12 @@ export const start = (params: StartParameters): Promise<APIResult<string>> => {
   });
 };
 
-export const stop = (server: Server): void => {
-  server.close();
+export const stop = (server: Server): Promise<void> => {
+  return new Promise((resolve) => {
+    server.close(() => {
+      resolve();
+    });
+  });
 };
 
 export const teardown = async (server: Server): Promise<void> => {
