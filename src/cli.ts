@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { HttpAPIServer } from "./api";
+import { createHttpServer } from "./api";
 import { logger } from "./logger";
 
 export type CliOptions = {
@@ -11,15 +11,13 @@ const SHUTDOWN_GRACE_PERIOD_MS = 30_000;
 let isExiting = false;
 
 const app = new Command();
-app.name("auth-service").description("Authentication service").version("0.1.0");
+app.name("galerie").description("Photo sharing application").version("0.1.0");
 
 app
   .command("start")
-  .description("Start the authentication service")
+  .description("Start the http server")
   .option("-p, --port <port>", "Port to listen on", "3000")
   .action(async (cliOptions) => {
-    const httpServer = new HttpAPIServer();
-
     const handleShutdownSignal = (signalName: string) => {
       logger.warn(`signal '${signalName}' received`);
       if (!isExiting) {
@@ -42,6 +40,9 @@ app
       }
     };
 
+    const httpServer = createHttpServer({
+      logger: logger.child({ component: "HttpServer" }),
+    });
     await httpServer.start(cliOptions);
 
     process.stdin.resume();
