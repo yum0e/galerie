@@ -1,60 +1,80 @@
 import express from "express";
 import http from "http";
 import { pinoHttp } from "pino-http";
-import { logger } from "../logger";
 import { CliOptions } from "../cli";
 import { APIResult } from "../error";
 import { ok } from "neverthrow";
 import { Server } from "http";
+import pino from "pino";
+import { logger as defaultLogger } from "../logger";
 
-const log = logger.child({ component: "HttpAPIServer" });
+export type HttpServer = {
+  logger: pino.Logger<never>;
+  getApi(): express.Express;
+  start(cliOptions: CliOptions): Promise<APIResult<string>>;
+  stop(): void;
+  teardown(): Promise<void>;
+};
 
-export class HttpAPIServer {
-  private app = express();
-  private server: Server;
+export type createHttpServerParameters = {
+  logger?: pino.Logger<never> | undefined;
+};
 
-  constructor() {
-    this.app.use(
-      pinoHttp({
-        logger,
-      }),
-    );
+export const createHttpServer = ({
+  logger = defaultLogger,
+}: createHttpServerParameters): HttpServer => {
+  const app = express();
 
-    this.initHandlers();
+  app.use(
+    pinoHttp({
+      logger: logger,
+    }),
+  );
 
-    this.server = http.createServer(this.app);
-  }
+  initHandlers(app);
 
-  getApi(): express.Express {
-    return this.app;
-  }
+  const server = http.createServer(app);
 
-  async start(cliOptions: CliOptions): Promise<APIResult<string>> {
-    return new Promise((resolve) => {
-      const port: number = cliOptions.port;
-      this.server.listen(port, () => {
-        log.info(`Server is listening on port ${port}`);
+  return {
+    logger,
+    getApi: () => app,
+    start: (cliOptions: CliOptions) => start({ server, logger, cliOptions }),
+    stop: () => stop(server),
+    teardown: () => teardown(server),
+  };
+};
 
-        resolve(ok(""));
-      });
+const initHandlers = (app: express.Express): void => {
+  app.get("/hello", (_, res) => {
+    res.send("Hello World!");
+  });
+
+  app.get("/health", (_, res) => {
+    res.send({ status: "ok" });
+  });
+};
+
+export type StartParameters = {
+  server: Server;
+  logger: pino.Logger<never>;
+  cliOptions: CliOptions;
+};
+
+export const start = (params: StartParameters): Promise<APIResult<string>> => {
+  return new Promise((resolve) => {
+    const port: number = params.cliOptions.port;
+    params.server.listen(port, () => {
+      params.logger.info(`Server is listening on port ${port}`);
+
+      resolve(ok(""));
     });
-  }
+  });
+};
 
-  async stop(): Promise<void> {
-    this.server.close();
-  }
+export const stop = (server: Server): void => {
+  server.close();
+};
 
-  teardown(): Promise<void> {
-    return this.stop();
-  }
-
-  initHandlers(): void {
-    this.app.get("/hello", (_, res) => {
-      res.send("Hello World!");
-    });
-
-    this.app.get("/health", (_, res) => {
-      res.send({ status: "ok" });
-    });
-  }
-}
+export const teardown = async (server: Server): Promise<void> => {
+  return stop(server);
+};
