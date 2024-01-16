@@ -26,4 +26,4 @@ runs:
     - name: Sync s3 static
       shell: bash
       run: |
-        cd apps/website && aws s3 sync ./build s3://${{ inputs.static-bucket-name }}
+        cd apps/website && pnpm build && aws s3 sync ./build s3://${{ inputs.static-bucket-name }}
