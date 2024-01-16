@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    /* Use commonJS module system */
+    "module": "commonjs",
+
+    /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "target": "es2022",
+
+    "moduleResolution": "Node",
+
+    /* Imports and compilation folder */
+    "baseUrl": "./src",
+    "rootDir": "src/",
+    "outDir": "build/",
+  },
+
+  "exclude": ["node_modules", "esbuild.config.js"]
+}

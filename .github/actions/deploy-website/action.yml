@@ -1,5 +1,5 @@
-name: "Deploy serverless backend"
-description: "Deploy serverless http api backend"
+name: "Deploy website"
+description: "Deploy website to AWS"
 
 inputs:
   aws-access-key-id:
@@ -8,9 +8,9 @@ inputs:
   aws-secret-access-key:
     required: true
     description: "The aws-secret-access-key used to authenticate with AWS"
-  stage:
+  static-bucket-name:
     required: true
-    description: "The serverless stage"
+    description: "The static bucket name to synchronize static files"
 
 runs:
   using: "composite"
@@ -23,7 +23,7 @@ runs:
         aws-region: eu-central-1
         role-duration-seconds: 900
 
-    - name: sls deploy
+    - name: Sync s3 static
       shell: bash
       run: |
-        cd apps/galerie-api && npx serverless deploy --stage ${{ inputs.stage }}
+        cd apps/website && aws s3 sync ./build s3://${{ inputs.static-bucket-name }}

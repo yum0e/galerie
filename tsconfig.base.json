@@ -6,13 +6,6 @@
     /* Emit additional JS to ease support for importing CJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */
     "esModuleInterop": true,
 
-    /* Use commonJS module system */
-    "module": "commonjs",
-
-    /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "target": "es2022",
-
-    "moduleResolution": "Node",
     "sourceMap": true,
 
     "forceConsistentCasingInFileNames": true,
@@ -20,17 +13,10 @@
 
     "strict": true,
     "resolveJsonModule": true,
-
-    /* Imports and compilation folder */
-    "baseUrl": "./src",
-    "rootDir": "src",
-    "outDir": "build",
   },
 
   "ts-node": {
     "swc": true,
     "esm": true
   },
-
-  "exclude": ["node_modules", "esbuild.config.js"]
 }

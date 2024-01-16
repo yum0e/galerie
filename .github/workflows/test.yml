@@ -18,7 +18,7 @@ jobs:
         uses: ./.github/actions/install-dependencies
 
       - name: Prettier
-        run: pnpm prettier
+        run: pnpm ci:lint
 
   tsc:
     name: Build
@@ -31,7 +31,7 @@ jobs:
         uses: ./.github/actions/install-dependencies
 
       - name: Build
-        run: npx tsc
+        run: pnpm ci:build
 
   test:
     name: Tests
@@ -44,4 +44,4 @@ jobs:
         uses: ./.github/actions/install-dependencies
 
       - name: Tests
-        run: pnpm test
+        run: pnpm ci:test
