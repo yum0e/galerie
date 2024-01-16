@@ -26,4 +26,4 @@ runs:
     - name: sls deploy
       shell: bash
       run: |
-        npx serverless deploy --stage ${{ inputs.stage }}
+        cd apps/galerie-api && npx serverless deploy --stage ${{ inputs.stage }}

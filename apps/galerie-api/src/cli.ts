@@ -16,7 +16,7 @@ app.name("galerie").description("Photo sharing application").version("0.1.0");
 app
   .command("start")
   .description("Start the http server")
-  .option("-p, --port <port>", "Port to listen on", "3000")
+  .option("-p, --port <port>", "Port to listen on", "8080")
   .action(async (cliOptions) => {
     const handleShutdownSignal = (signalName: string) => {
       logger.warn(`signal '${signalName}' received`);
