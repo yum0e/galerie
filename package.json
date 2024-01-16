@@ -4,7 +4,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "ci:build": "cd apps/galerie-api && npx tsc",
+    "ci:build": "pnpm build:api && pnpm build:website",
+    "build:api": "cd apps/galerie-api && npx tsc",
+    "build:website": "cd apps/website && pnpm build",
+    "ci:lint": "prettier --write .",
     "ci:test": "cd apps/galerie-api && pnpm test"
   },
   "devDependencies": {
