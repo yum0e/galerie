@@ -1,0 +1,29 @@
+name: "Deploy website"
+description: "Deploy website to AWS"
+
+inputs:
+  aws-access-key-id:
+    required: true
+    description: "The aws-access-key used to authenticate with AWS"
+  aws-secret-access-key:
+    required: true
+    description: "The aws-secret-access-key used to authenticate with AWS"
+  static-bucket-name:
+    required: true
+    description: "The static bucket name to synchronize static files"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: eu-central-1
+        role-duration-seconds: 900
+
+    - name: Sync s3 static
+      shell: bash
+      run: |
+        cd apps/website && aws s3 sync ./build s3://${{ inputs.static-bucket-name }}

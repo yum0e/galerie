@@ -23,3 +23,10 @@ jobs:
           stage: dev
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Deploy website
+        uses: ./.github/actions/deploy-website
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          static-bucket-name: ${{ secrets.STATIC_BUCKET_NAME }}
