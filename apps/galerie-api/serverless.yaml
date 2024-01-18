@@ -17,7 +17,7 @@ custom:
     config: './esbuild.config.js'
   envs:
     dev:
-      G_FILE_STORAGE_TYPE: local
+      G_FILE_STORAGE_TYPE: "s3"
 
 provider:
   name: aws
