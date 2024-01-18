@@ -1,23 +1,15 @@
-import { Command } from "commander";
-import { createHttpServer } from "./api/api";
-import { logger } from "./logger";
-
-export type CliOptions = {
-  port: number;
-};
+import { cli, addCommonOptions } from ".";
+import { logger } from "../logger";
+import { createHttpServer, createHttpServerParameters } from "../api";
 
 // Grace period before exiting the process after receiving a SIGINT or SIGTERM
 const SHUTDOWN_GRACE_PERIOD_MS = 30_000;
 let isExiting = false;
 
-const app = new Command();
-app.name("galerie").description("Photo sharing application").version("0.1.0");
-
-app
-  .command("start")
-  .description("Start the http server")
-  .option("-p, --port <port>", "Port to listen on", "8080")
-  .action(async (cliOptions) => {
+const startCmd = cli.command("start").description("Start the http server");
+addCommonOptions(startCmd);
+startCmd.action(
+  async (serverParams: createHttpServerParameters & { port: number }) => {
     const handleShutdownSignal = (signalName: string) => {
       logger.warn(`signal '${signalName}' received`);
       if (!isExiting) {
@@ -40,10 +32,8 @@ app
       }
     };
 
-    const httpServer = createHttpServer({
-      logger: logger.child({ component: "HttpServer" }),
-    });
-    await httpServer.start(cliOptions);
+    const httpServer = await createHttpServer(serverParams);
+    await httpServer.start({ port: serverParams.port });
 
     process.stdin.resume();
 
@@ -70,6 +60,5 @@ app
 
       handleShutdownSignal("unhandledRejection");
     });
-  });
-
-app.parse(process.argv);
+  },
+);

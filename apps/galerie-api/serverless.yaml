@@ -10,6 +10,15 @@ plugins:
   - serverless-esbuild
   - serverless-offline
 
+custom:
+  serverless-offline:
+    noPrependStageInUrl: true
+  esbuild:
+    config: './esbuild.config.js'
+  envs:
+    dev:
+      G_FILE_STORAGE_TYPE: local
+
 provider:
   name: aws
   runtime: nodejs18.x
@@ -22,9 +31,4 @@ functions:
     handler: ./src/api/api-lambda.handler
     events:
       - httpApi: '*'
-
-custom:
-  serverless-offline:
-    noPrependStageInUrl: true
-  esbuild:
-    config: './esbuild.config.js'
+    environment: ${self:custom.envs.${sls:stage}}

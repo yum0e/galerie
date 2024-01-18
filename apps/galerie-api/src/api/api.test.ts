@@ -1,9 +1,16 @@
-import { createHttpServer } from "./api";
-import { expect, test } from "vitest";
+import { HttpServer, createHttpServer } from "./api";
+import { beforeAll, expect, test } from "vitest";
 import supertest from "supertest";
 import axios from "axios";
+import { FileStorageType, createFileStore } from "../file-store";
 
-const server = createHttpServer({});
+let server: HttpServer;
+
+beforeAll(async () => {
+  server = await createHttpServer({
+    fileStore: createFileStore(FileStorageType.Local)._unsafeUnwrap(),
+  });
+});
 
 test("with superset", async () => {
   const app = server.getApi();
