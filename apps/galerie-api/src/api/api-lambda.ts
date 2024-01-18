@@ -1,21 +1,23 @@
-import { createHttpServer } from "./api";
+import { createHttpServer, createHttpServerParameters } from "./api";
 import serverless, { Handler } from "serverless-http";
-import { logger } from "../logger";
+import { startLambdaCmd } from "cli";
 
-let cachedLambdaHandler: Handler;
+let lambdaHandler: Handler;
 
-const getLambdaHandler = () => {
-  if (!cachedLambdaHandler) {
-    const httpServer = createHttpServer({
-      logger: logger.child({ component: "HttpAPIServer" }),
-    });
-    const app = httpServer.getApi();
-    cachedLambdaHandler = serverless(app, { provider: "aws" });
-  }
-  return cachedLambdaHandler;
-};
+type StartLambdaCmdOptions = createHttpServerParameters & { port: number };
+let options: StartLambdaCmdOptions;
 
 export const handler = async (event: string, context: any) => {
-  const lambdaHandler = getLambdaHandler();
+  if (!options) {
+    // parse the command line options that have been passed in env variables in serverless.yaml
+    await startLambdaCmd.parseAsync([], { from: "user" });
+    // get the options to be able to instantiate the http server
+    options = startLambdaCmd.opts<StartLambdaCmdOptions>();
+
+    const httpServer = await createHttpServer(options);
+    const app = httpServer.getApi();
+    lambdaHandler = serverless(app, { provider: "aws" });
+  }
+
   return lambdaHandler(event, context);
 };
